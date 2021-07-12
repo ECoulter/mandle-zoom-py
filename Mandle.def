@@ -1,0 +1,41 @@
+BootStrap: docker
+From: jfloff/alpine-python:latest
+#TODO: Base on numpy_pillow.sif, so it's just crapping in my .py files
+
+# If you want the updates (available at the bootstrap date) to be installed
+# inside the container during the bootstrap instead of the General Availability
+# point release (7.x) then uncomment the following line
+#UpdateURL: http://mirror.centos.org/centos-%{OSVERSION}/%{OSVERSION}/updates/$basearch/
+
+%files
+
+  ./parallel_mandle.py /usr/local/bin/mandle/parallel_mandle.py
+  ./zoom_mandle.py /usr/local/bin/mandle/zoom_mandle.py
+  
+%post
+  apk add --no-cache zlib-dev \
+                     jpeg-dev \
+                     zlib-dev \
+                     freetype-dev \
+                     lcms2-dev \
+                     openjpeg-dev \
+                     tiff-dev \
+                     tk-dev \
+                     tcl-dev \
+                     harfbuzz-dev \
+                     fribidi-dev
+               
+  python --version
+  python -m pip install --upgrade pip wheel
+  python -m pip install --upgrade Pillow numpy
+  python -m pip list
+  which python
+
+  chmod 755 /usr/local/bin/mandle/zoom_mandle.py
+
+%runscript
+  /usr/local/bin/mandle/zoom_mandle.py
+
+%help
+ This container includes the python Pillow and numpy libraries, needed to run
+ Eric's Mandlebrot gif generator, at /usr/local/bin/mandle/zoom_mandle.py.
