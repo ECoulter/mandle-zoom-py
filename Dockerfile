@@ -31,6 +31,9 @@ RUN  python3 --version && \
 
 RUN chmod 755 /usr/local/bin/mandle/zoom_mandle.py
 
+ENTRYPOINT ["/usr/local/bin/mandle/zoom_mandle.py"]
+CMD ["--help"]
+
 #TODO: Add metadata and edit the runscript
 #%runscript
 #  /usr/local/bin/mandle/zoom_mandle.py
