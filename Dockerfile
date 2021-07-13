@@ -1,13 +1,7 @@
+#Using a slim Debian base image tagged at a specific date
 FROM debian:buster-20210621-slim
 
-# If you want the updates (available at the bootstrap date) to be installed
-# inside the container during the bootstrap instead of the General Availability
-# point release (7.x) then uncomment the following line
-#UpdateURL: http://mirror.centos.org/centos-%{OSVERSION}/%{OSVERSION}/updates/$basearch/
-
-COPY  ./parallel_mandle.py /usr/local/bin/mandle/parallel_mandle.py
-COPY  ./zoom_mandle.py /usr/local/bin/mandle/zoom_mandle.py
-
+#The next two steps install OS-level dependencies
 RUN apt update
 
 RUN apt install -y zlib1g-dev \
@@ -22,22 +16,23 @@ RUN apt install -y zlib1g-dev \
                    libfribidi-dev \
                    python3 \
                    python3-pip
-               
-RUN  python3 --version && \
-  python3 -m pip install --upgrade pip wheel && \
-  python3 -m pip install --upgrade Pillow numpy && \
-  python3 -m pip list && \
-  which python3
 
+#Here, we install python deps - this could be done via a requirements.txt file as well
+#  but left explicit here for illustrative purposes
+RUN  python3 --version && \
+     python3 -m pip install --upgrade pip wheel && \
+     python3 -m pip install --upgrade Pillow numpy && \
+     python3 -m pip list && \
+     which python3
+
+#Add our python scripts into the container where they're available to the
+# default $PATH
+COPY  ./parallel_mandle.py /usr/local/bin/mandle/parallel_mandle.py
+COPY  ./zoom_mandle.py /usr/local/bin/mandle/zoom_mandle.py
+
+#Make the main script executable
 RUN chmod 755 /usr/local/bin/mandle/zoom_mandle.py
 
+#Set the entrypoint to our app with extra CMD to run --help by default
 ENTRYPOINT ["/usr/local/bin/mandle/zoom_mandle.py"]
 CMD ["--help"]
-
-#TODO: Add metadata and edit the runscript
-#%runscript
-#  /usr/local/bin/mandle/zoom_mandle.py
-#
-#%help
-# This container includes the python Pillow and numpy libraries, needed to run
-# Eric's Mandlebrot gif generator, at /usr/local/bin/mandle/zoom_mandle.py.
