@@ -11,15 +11,11 @@ The following steps should allow you to test this out on a system with docker an
 
 1. `docker build -t $USER/python-mandle .`
 
-1. `docker run -v $PWD:$PWD -it $USER/python-mandle $PWD/mandle_ex.gif`
+1. `docker run -u $(id -u) -g $(id -g) -v $PWD:$PWD -it $USER/python-mandle $PWD/mandle_ex.gif`
 
-1. `sudo singularity build mandle.sif mandle.def`
+1. `sudo singularity build mandle.sif Mandle.def`
 
 1. `singularity run mandle.sif -n 2 sing_mandle_ex.gif`
-
-Note that there are Two dockerfiles included here: one based on Debian (Buster-slim) 
-and one based on Alpine (jfloff/alpine-python). The Debian example illustrates
-good version-pinning practices, while the Alpine example is more expedient in nature.
 
 For submission on an HPC system using SLURM, you could use the following:
 (Assuming you've uploaded this .sif file locally to APPDIR)
