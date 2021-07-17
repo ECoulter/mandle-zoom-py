@@ -32,7 +32,7 @@ def main():
   parser=argparse.ArgumentParser()
   parser.add_argument("output_file",type=str,help="Output filename - in GIF format",default="newzoom.gif")
   parser.add_argument("-n","--nprocs",type=int,help="Number of multiprocessing threads to spawn",action="store",default=2)
-  parser.add_argument("-f","--fspd",type=int,help="Frame speed of GIF in microseconds",action="store",default=100)
+  parser.add_argument("-d","--dur",type=int,help="Frame speed of GIF in microseconds",action="store",default=100)
   parser.add_argument("-s","--nsteps",type=int,help="Number of steps in the zoom",action="store",default=2)
   parser.add_argument("-w","--swin",type=float,help="Size of the starting frame",action="store",default=2)
   parser.add_argument("-f","--fwin",type=float,help="Size of the ending frame",action="store",default=0.005)
@@ -42,7 +42,7 @@ def main():
 #    print("Flag turned on")
 #  print("This is an argument:",args.string_arg)
 # Add args for starting boundary, origin, final boundary, steps
-  zoom_loop(start_win_size=args.swin,fin_win_size=args.fwin,origin=args.origin,num_steps=args.nsteps,numprocs=args.nprocs,output_file=args.output_file,giftime=args.fspd)
+  zoom_loop(start_win_size=args.swin,fin_win_size=args.fwin,origin=args.origin,num_steps=args.nsteps,numprocs=args.nprocs,output_file=args.output_file,giftime=args.dur)
 
 
 if __name__ == '__main__':
